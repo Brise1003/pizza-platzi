@@ -1,12 +1,19 @@
 package com.platzipizzeria.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "pizza_order")
+@Getter
+@Setter
+@NoArgsConstructor
 public class OrderEntity {
 
     @Id
@@ -28,4 +35,11 @@ public class OrderEntity {
 
     @Column(name = "additional_notes", length = 200)
     private String additionalNotes;
+
+    @OneToOne
+    @JoinColumn(name = "id_customer", referencedColumnName = "id_customer", insertable = false, updatable = false)
+    private CustomerEntity customerEntity;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItemEntity> items;
 }
