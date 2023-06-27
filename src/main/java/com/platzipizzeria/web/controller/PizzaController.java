@@ -2,10 +2,14 @@ package com.platzipizzeria.web.controller;
 
 import com.platzipizzeria.persistence.entity.PizzaEntity;
 import com.platzipizzeria.service.PizzaService;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -20,13 +24,43 @@ public class PizzaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PizzaEntity>> getAll(){
-        return ResponseEntity.ok(this.pizzaService.getAll());
+    public ResponseEntity<Page<PizzaEntity>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "1") int elements){
+        return ResponseEntity.ok(this.pizzaService.getAll(page, elements));
     }
 
     @GetMapping("/{idPizza}")
     public ResponseEntity<PizzaEntity> get(@PathVariable int idPizza){
         return ResponseEntity.ok(this.pizzaService.get(idPizza));
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<Page<PizzaEntity>> getAvailable(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "1") int elements,
+                                                          @RequestParam(defaultValue = "price") String sortBy,
+                                                          @RequestParam(defaultValue = "ASC") String sortDirection
+    ){
+        return ResponseEntity.ok(this.pizzaService.getAvailable(page, elements, sortBy, sortDirection));
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<PizzaEntity> getByName(@PathVariable String name){
+        return ResponseEntity.ok(this.pizzaService.getByName(name));
+    }
+
+    @GetMapping("/with/{ingredient}")
+    public ResponseEntity<List<PizzaEntity>> getWith(@PathVariable String ingredient){
+        return ResponseEntity.ok(this.pizzaService.getWith(ingredient));
+    }
+
+    @GetMapping("/without/{ingredient}")
+    public ResponseEntity<List<PizzaEntity>> getWithOut(@PathVariable String ingredient){
+        return ResponseEntity.ok(this.pizzaService.getWith(ingredient));
+    }
+
+    @GetMapping("/cheapest/{price}")
+    public ResponseEntity<List<PizzaEntity>> getCheapestPizzas(@PathVariable BigDecimal price){
+        return ResponseEntity.ok(this.pizzaService.getCheapest(price));
     }
 
     @PostMapping
