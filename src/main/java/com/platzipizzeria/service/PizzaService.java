@@ -3,6 +3,7 @@ package com.platzipizzeria.service;
 import com.platzipizzeria.persistence.entity.PizzaEntity;
 import com.platzipizzeria.persistence.repository.PizzaPageSortRepository;
 import com.platzipizzeria.persistence.repository.PizzaRepository;
+import com.platzipizzeria.service.Exception.EmailApiException;
 import com.platzipizzeria.service.dto.UpdatePizzaPriceDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -70,8 +71,13 @@ public class PizzaService {
         this.pizzaRepository.deleteById(idPizza);
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = EmailApiException.class)
     public void updatePrice(UpdatePizzaPriceDto dto){
         this.pizzaRepository.updatePrice(dto);
+        this.sendEmail();
+    }
+
+    private void sendEmail(){
+        throw new EmailApiException();
     }
 }
