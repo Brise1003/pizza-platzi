@@ -1,5 +1,6 @@
 package com.platzipizzeria.service;
 
+import com.platzipizzeria.persistence.Projection.OrderSummary;
 import com.platzipizzeria.persistence.entity.OrderEntity;
 import com.platzipizzeria.persistence.repository.OrderRepository;
 import jakarta.persistence.criteria.Order;
@@ -39,5 +40,9 @@ public class OrderService {
 
     public List<OrderEntity> getCustomerOrders(String idCustomer){
         return this.orderRepository.findCustomerOrders(idCustomer);
+    }
+
+    public OrderSummary getSummary(int orderId){
+        return this.orderRepository.findSummary(orderId);
     }
 }

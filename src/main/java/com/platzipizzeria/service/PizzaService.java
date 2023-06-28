@@ -3,11 +3,13 @@ package com.platzipizzeria.service;
 import com.platzipizzeria.persistence.entity.PizzaEntity;
 import com.platzipizzeria.persistence.repository.PizzaPageSortRepository;
 import com.platzipizzeria.persistence.repository.PizzaRepository;
+import com.platzipizzeria.service.dto.UpdatePizzaPriceDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -66,5 +68,10 @@ public class PizzaService {
 
     public void delete(int idPizza){
         this.pizzaRepository.deleteById(idPizza);
+    }
+
+    @Transactional
+    public void updatePrice(UpdatePizzaPriceDto dto){
+        this.pizzaRepository.updatePrice(dto);
     }
 }

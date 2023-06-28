@@ -2,6 +2,7 @@ package com.platzipizzeria.web.controller;
 
 import com.platzipizzeria.persistence.entity.PizzaEntity;
 import com.platzipizzeria.service.PizzaService;
+import com.platzipizzeria.service.dto.UpdatePizzaPriceDto;
 import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -83,6 +84,15 @@ public class PizzaController {
     public ResponseEntity<Void> delete(@PathVariable int idPizza){
         if(this.pizzaService.exists(idPizza)){
             this.pizzaService.delete(idPizza);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/price")
+    public ResponseEntity<PizzaEntity> updatePrice(@RequestBody UpdatePizzaPriceDto dto){
+        if(this.pizzaService.exists(dto.getPizzaId())){
+            this.pizzaService.updatePrice(dto);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
